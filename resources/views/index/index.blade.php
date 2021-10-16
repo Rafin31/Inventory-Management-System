@@ -54,39 +54,32 @@
                         <p id="updateP"><strong>Update Product</strong></p>
                     </div>
                     <div class="card-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Product Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                    aria-describedby="emailHelp" placeholder="Product Name">
-                            </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Product Name</label>
+                            <input type="text" class="form-control" id="product_name" aria-describedby="emailHelp"
+                                placeholder="Product Name">
+                        </div>
 
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Catagory</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Catagory">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Seller Name</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Seller Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Price Each</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Price Each">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Quantity</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Quantity">
-                            </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Catagory</label>
+                            <input type="text" class="form-control" id="catagory" placeholder="Catagory">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Seller Name</label>
+                            <input type="text" class="form-control" id="seller_name" placeholder="Seller Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Price Each</label>
+                            <input type="text" class="form-control" id="price_each" placeholder="Price Each">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Quantity</label>
+                            <input type="text" class="form-control" id="quantity" placeholder="Quantity">
+                        </div>
 
-                            <button type="submit" id="addButton" onclick="addData()"
-                                class="btn btn-primary w-100 ">Add</button>
-                            <button type="submit" id="updateButton" onclick="updateData()"
-                                class="btn btn-info w-100 ">Update</button>
-                        </form>
+                        <button type="submit" id="addButton" onclick="addData()"
+                            class="btn btn-primary w-100 ">Add</button>
+                        <button type="submit" id="updateButton" class="btn btn-info w-100 ">Update</button>
                     </div>
                 </div>
             </div>
@@ -139,6 +132,31 @@
         }
 
         allData();
+
+        function addData(){
+            let product_name = $('#product_name').val();
+            let catagory =  $('#catagory').val();
+            let seller_name = $('#seller_name').val();
+            let price_each = $('#price_each').val();
+            let quantity = $('#quantity').val();
+
+
+
+            $.ajax({
+                type:"POST",
+                dataType: 'json',
+                data: {product_name:product_name , catagory:catagory , seller_name:seller_name , price_each:price_each , quantity:quantity},
+                url:"/addProduct",
+
+                success:function(data){
+                    allData();
+                    alert("Added");
+                }
+            })
+
+
+        
+        }
 
     </script>
 

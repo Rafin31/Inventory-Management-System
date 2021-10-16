@@ -17,3 +17,4 @@ Route::get('/', function () {
     return view('index.index');
 });
 Route::get('/stocks', 'stocksController@allStocks');
+Route::post('/addProduct', 'stocksController@addProduct');
