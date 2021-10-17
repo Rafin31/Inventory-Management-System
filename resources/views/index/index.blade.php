@@ -27,6 +27,9 @@
                         Products
                     </div>
                     <div class="card-body table-responsive-sm">
+                        <div class="col-12 d-flex justify-content-end">
+                            <a class="btn btn-primary mb-3 w-25 " href="">Sale Table</a>
+                        </div>
                         <table class="table table-striped border">
                             <thead>
                                 <tr>
@@ -249,7 +252,7 @@
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
               cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
+              confirmButtonText: 'Yes, Update it!'
             }).then((result) => {
               if (result.isConfirmed) {
 
@@ -280,11 +283,13 @@
 
             })
 
-                Swal.fire(
-                  'Deleted!',
-                  'Your file has been deleted.',
-                  'success'
-                )
+            Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Your data has been updated',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
               }
             })
 
@@ -334,11 +339,14 @@
 
             })
 
-            swalWithBootstrapButtons.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-            )
+            Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Your data has been deleted',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            
         } else if (
             result.dismiss === Swal.DismissReason.cancel
         ) {
