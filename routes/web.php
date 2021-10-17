@@ -18,3 +18,6 @@ Route::get('/', function () {
 });
 Route::get('/stocks', 'stocksController@allStocks');
 Route::post('/addProduct', 'stocksController@addProduct');
+Route::post('/edit/{id}/updated', 'stocksController@updated');
+Route::get('/edit/{id}', 'stocksController@editData');
+Route::post('/delete/{id}', 'stocksController@deleteData');
