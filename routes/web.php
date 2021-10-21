@@ -21,3 +21,7 @@ Route::post('/addProduct', 'stocksController@addProduct');
 Route::post('/edit/{id}/updated', 'stocksController@updated');
 Route::get('/edit/{id}', 'stocksController@editData');
 Route::post('/delete/{id}', 'stocksController@deleteData');
+
+
+Route::get('/sale_table', 'saleController@index');
+Route::get('/sale_data', 'saleController@saleData');

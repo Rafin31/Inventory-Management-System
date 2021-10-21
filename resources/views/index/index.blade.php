@@ -28,7 +28,7 @@
                     </div>
                     <div class="card-body table-responsive-sm">
                         <div class="col-12 d-flex justify-content-end">
-                            <a class="btn btn-primary mb-3 w-25 " href="">Sale Table</a>
+                            <a class="btn btn-primary mb-3 w-25 " href="/sale_table">Sale Table</a>
                         </div>
                         <table class="table table-striped border">
                             <thead>
@@ -122,6 +122,50 @@
         </div>
     </div>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product Sale</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Product Id</span>
+                        </div>
+                        <input type="number" id="sale_product_id" class="form-control" aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm" disabled>
+                    </div>
+
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Quantity</span>
+                        </div>
+                        <input type="number" id="quantity" class="form-control" aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm">
+                    </div>
+
+                    <div class="input-group">
+                        <input type="number" id="price" class="form-control"
+                            aria-label="Amount (to the nearest dollar)">
+                        <div class="input-group-append">
+                            <span class="input-group-text">BDT</span>
+                            <span class="input-group-text">0.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="sold()">Sold</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         $(document).ajaxStart(function(){
@@ -130,7 +174,7 @@
           $("#loading").delay(5000).hide();
         });
 
-
+       
 
         $('#addP').show();
         $('#updateP').hide();
@@ -163,7 +207,7 @@
                    data = data + "<td>"+value.Total_Price+"</td>"
                    data = data + "<td>"+value.Stock_in_date+"</td>"
                    data = data + "<td>"
-                   data = data + "<button class='btn btn-success'>Sold</button>"
+                   data = data + "<button class='btn btn-success sale_modal_button' onclick='modalButtonClicked("+value.id+")' data-toggle='modal' data-target='#exampleModal'>Sold</button>"
                    data = data + "<a href='#updateButton' class='btn btn-info mx-3' onclick='editData("+value.id+")'  >Edit</a>"
                    data = data + "<button class='btn btn-danger' onclick='deleteData("+value.id+")' >Delete</button>"
                    data = data + "</td>"
@@ -174,8 +218,12 @@
             }
         })
         }
-
+       
         allData();
+
+        function modalButtonClicked(id) {
+          $('#sale_product_id').val(id);
+        }
 
         function addData(){
             let product_name = $('#product_name').val();
@@ -359,6 +407,16 @@
         })
 
            
+
+        }
+
+        function  sold() {
+
+            let id = $('#sale_product_id').val();
+            let quantity = $('#quantity').val();
+            let price = $('#price').val();
+
+            console.log(id);
 
         }
 

@@ -19,8 +19,9 @@ class SaleTable extends Migration
             $table->foreign("Product_Id")->references('id')->on("stocks")->onUpdate('cascade')->onDelete('cascade');
             $table->integer("sale_quantity");
             $table->float("selling_price", 10, 2);
+            $table->float("total_selling_price", 10, 2);
             $table->float("Profit", 10, 2)->signed();
-            $table->timestamp("Date/Time");
+            $table->timestamp("date");
         });
     }
 
