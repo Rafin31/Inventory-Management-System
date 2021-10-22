@@ -25,8 +25,13 @@
                         Products
                     </div>
                     <div class="card-body table-responsive-sm">
-                        <div class="col-12 d-flex justify-content-end">
-                            <a class="btn btn-primary mb-3 w-25 " href="/sale_table">Sale Table</a>
+                        <div class="row justify-content-center">
+                            <div class="col-12 justify-content-center">
+                                <a class="btn btn-primary mb-3 w-25 " href="/sale_table">Sale Table</a>
+                            </div>
+                            <div class="col-8 form-outline mb-4">
+                                <input type="search" class="form-control" id="search_input" placeholder="Search">
+                            </div>
                         </div>
                         <table class="table table-striped border">
                             <thead>
@@ -49,9 +54,11 @@
                                         <h3 class="alert-info text-dark font-weight-bold py-3">Loading...</h3>
                                     </div>
                                 </td>
-
                             </tbody>
                         </table>
+
+                        <div class="pagination" id="pagination">
+                        </div>
 
                     </div>
                 </div>

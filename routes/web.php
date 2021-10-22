@@ -27,4 +27,6 @@ Route::post('/delete/{id}', 'stocksController@deleteData');
 Route::get('/sale_table', 'saleController@index');
 Route::get('/sale_data', 'saleController@saleData');
 
+Route::get('/search', 'stocksController@search');
+
 Route::post('/sold', 'stocksController@sold');

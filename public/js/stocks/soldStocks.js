@@ -19,13 +19,32 @@ function sold() {
 
         success: function(data) {
             allData();
-            console.log(data);
-
+            if (data.status == 200) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Product Sold',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            } else if (data.status == 201) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.message,
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                })
+            }
         },
         error: function(data) {
 
-            $("#sold_quantity").text(data.responseJSON.errors.selling_quantity)
-            $("#sold_price").text(data.responseJSON.errors.selling_price)
+            $("#sold_quantity").text(data.responseJSON.errors.quantity)
+            $("#sold_price").text(data.responseJSON.errors.price)
 
         }
     })

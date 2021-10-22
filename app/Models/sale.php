@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class sale extends Model
 {
     protected $table = 'sale_table';
-    protected $dateFormat = 'U';
+    public $timestamps = false;
     use HasFactory;
     protected $fillable = [
         "Product_Id",

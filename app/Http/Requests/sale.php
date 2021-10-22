@@ -24,8 +24,8 @@ class sale extends FormRequest
     public function rules()
     {
         return [
-            'quantity_of_selling' => 'required',
-            'price_of_selling' => 'required'
+            'quantity' => 'required|numeric',
+            'price' => 'required|numeric'
         ];
     }
 }

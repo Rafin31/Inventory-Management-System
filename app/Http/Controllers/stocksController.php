@@ -15,7 +15,7 @@ class stocksController extends Controller
 
     public function allStocks()
     {
-        $data = stocks::orderBy('id', 'DESC')->get();
+        $data = stocks::orderBy('id', 'ASC')->paginate(50);
         return response()->json($data);
     }
 
@@ -62,15 +62,14 @@ class stocksController extends Controller
         return response()->json($data);
     }
 
-    public function sold(RequestsSale $req, $id)
+    public function sold(RequestsSale $req)
     {
         $sale = new sale;
-        $stocks = stocks::find($id);
-
+        $stocks = stocks::find($req->id);
 
         if ($stocks->Quantity > $req->quantity) {
 
-            DB::transaction();
+            DB::beginTransaction();
             try {
                 $stocks->Quantity = $stocks->Quantity - $req->quantity;
                 $stocks->save();
@@ -79,22 +78,49 @@ class stocksController extends Controller
                 $sale->sale_quantity = $req->quantity;
                 $sale->selling_price = $req->price;
                 $sale->total_selling_price = $req->quantity * $req->price;
-                $sale->Profit = ($stocks->Product_Price * $req->quantity) - ($req->quantity * $req->price);
+                $sale->Profit = ($req->quantity * $req->price) - ($stocks->Product_Price * $req->quantity);
                 $sale->save();
-
                 DB::commit();
 
                 return response()->json([
                     'status' => 200,
-                    'message' => "Sold"
+                    'message' => "Successfull"
                 ]);
             } catch (\Throwable $th) {
+                return response()->json($th);
             }
         } else {
             return response()->json([
                 'status' => 201,
-                'message' => "Products quantity are short",
+                'message' => "Not enough in quantity"
             ]);
+        }
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+
+            if ($request->search != " ") {
+                $stocks = DB::table('stocks')->where('Product_Name', 'LIKE', '%' . $request->search . "%",)
+                    ->orWhere('Catagory', 'LIKE', '%' . $request->search . "%",)
+                    ->orWhere('Seller_Name', 'LIKE', '%' . $request->search . "%",)
+                    ->orderBy('id', 'DESC')
+                    ->get();
+                if ($stocks->isEmpty()) {
+                    return response()->json([
+                        'status' => 201,
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $stocks
+                    ]);
+                }
+            } else {
+                $data = stocks::orderBy('id', 'DESC')->get();
+                return response()->json($data);
+            }
         }
     }
 }
