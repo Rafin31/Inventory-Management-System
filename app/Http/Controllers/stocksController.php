@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\sale as RequestsSale;
 use App\Http\Requests\stocks as RequestsStocks;
+use App\Models\sale;
 use App\Models\stocks;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class stocksController extends Controller
 {
@@ -57,5 +60,41 @@ class stocksController extends Controller
     {
         $data = stocks::destroy($id);
         return response()->json($data);
+    }
+
+    public function sold(RequestsSale $req, $id)
+    {
+        $sale = new sale;
+        $stocks = stocks::find($id);
+
+
+        if ($stocks->Quantity > $req->quantity) {
+
+            DB::transaction();
+            try {
+                $stocks->Quantity = $stocks->Quantity - $req->quantity;
+                $stocks->save();
+
+                $sale->Product_Id = $stocks->id;
+                $sale->sale_quantity = $req->quantity;
+                $sale->selling_price = $req->price;
+                $sale->total_selling_price = $req->quantity * $req->price;
+                $sale->Profit = ($stocks->Product_Price * $req->quantity) - ($req->quantity * $req->price);
+                $sale->save();
+
+                DB::commit();
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => "Sold"
+                ]);
+            } catch (\Throwable $th) {
+            }
+        } else {
+            return response()->json([
+                'status' => 201,
+                'message' => "Products quantity are short",
+            ]);
+        }
     }
 }

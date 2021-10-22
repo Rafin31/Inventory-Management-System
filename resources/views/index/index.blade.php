@@ -7,9 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{csrf_token()}}">
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
-    <script src="{{asset('js/app.js')}}"></script>
 
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Inventroy System | Stocks</title>
 </head>
@@ -47,8 +45,8 @@
                             <tbody>
 
                                 <td colspan="9">
-                                    <div class="text-center text-dark h3" id="loading" style="display: none;">
-                                        Loading..
+                                    <div class="text-center text-dark h3 loading">
+                                        <h3 class="alert-info text-dark font-weight-bold py-3">Loading...</h3>
                                     </div>
                                 </td>
 
@@ -61,8 +59,9 @@
             <div class="col-10 col-md-5">
                 <div class="card ">
                     <div class="card-header">
-                        <p id="addP"><strong>Add Product</strong></p>
-                        <p id="updateP"><strong>Update Product</strong></p>
+                        <h3 class="alert-info text-dark font-weight-bold py-3 loading">Loading...</h3>
+                        <p id="addP" class="show"><strong>Add Product</strong></p>
+                        <p id="updateP" class="show"><strong>Update Product</strong></p>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -108,10 +107,10 @@
                             </div>
                             <input type="hidden" id="id">
                         </div>
-
+                        <h3 class="alert-info text-dark font-weight-bold py-3 loading">Loading...</h3>
                         <button type="submit" id="addButton" onclick="addData()"
-                            class="btn btn-primary w-100 ">Add</button>
-                        <button type="submit" id="updateButton" class="btn btn-info w-100"
+                            class="btn btn-primary w-100 show">Add</button>
+                        <button type="submit" id="updateButton" class="btn btn-info w-100 show"
                             onclick="updated()">Update</button>
                         <div class="errors">
                             <span class="alert-danger " id="updateButton"></span>
@@ -145,280 +144,66 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Quantity</span>
                         </div>
-                        <input type="number" id="quantity" class="form-control" aria-label="Small"
-                            aria-describedby="inputGroup-sizing-sm">
+
+                        <input type="number" id="sale_quantity" class="form-control" name="quantity_of_selling"
+                            aria-label=" quantity">
+
+                        <span class="alert-danger font-weight-bold" id="sold_quantity"></span>
+
                     </div>
 
                     <div class="input-group">
-                        <input type="number" id="price" class="form-control"
+                        <input type="number" id="sale_price" class="form-control" name="price_of_selling"
                             aria-label="Amount (to the nearest dollar)">
                         <div class="input-group-append">
                             <span class="input-group-text">BDT</span>
                             <span class="input-group-text">0.00</span>
                         </div>
                     </div>
+                    <div class="error">
+                        <span class="alert-danger font-weight-bold" id="sold_price"> </span>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="sold()">Sold</button>
+                    <button type="submit" class="btn btn-primary" onclick="sold()">Sold</button>
                 </div>
             </div>
         </div>
     </div>
 
+    @include('ajaxSetup.ajaxSetup');
+
+    <script src="{{asset('js/app.js')}}"></script>
+    <script src="{{asset('js/custom.js')}}"></script>
+    <script src="{{asset('js/InsertStocks.js')}}"></script>
+    <script src="{{asset('js/stocks/InsertStocks.js')}}"></script>
+    <script src="{{asset('js/stocks/updateStocks.js')}}"></script>
+    <script src="{{asset('js/stocks/searchStocks.js')}}"></script>
+    <script src="{{asset('js/stocks/deleteStocks.js')}}"></script>
+    <script src="{{asset('js/stocks/readStocks.js')}}"></script>
+    <script src="{{asset('js/stocks/soldStocks.js')}}"></script>
+
+    <script src="{{asset('js/sale/readSale.js')}}"></script>
+    <script src="{{asset('js/sale/searchSale.js')}}"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
 
     <script>
         $(document).ajaxStart(function(){
-          $("#loading").show();
+        $(".loading").show();
         }).ajaxStop(function() {
-          $("#loading").delay(5000).hide();
+          $(".loading").hide();
         });
-
-       
 
         $('#addP').show();
         $('#updateP').hide();
         $('#addButton').show();
         $('#updateButton').hide();
 
-
-        $.ajaxSetup({
-            headers:{
-                "x-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-
-        function allData(params){
-            $.ajax({
-            type:"GET",
-            dataType: 'json',
-            url: "/stocks",
-            success:function(response){
-                var data = " " ;
-               $.each(response ,function(key , value) {
-
-                data = data + "<tr>"
-                   data = data + "<td>"+value.id+"</td>"
-                   data = data + "<td>"+value.Product_Name+"</td>"
-                   data = data + "<td>"+value.Catagory+"</td>"
-                   data = data + "<td>"+value.Seller_Name+"</td>"
-                   data = data + "<td>"+value.Product_Price+"</td>"
-                   data = data + "<td>"+value.Quantity+"</td>"
-                   data = data + "<td>"+value.Total_Price+"</td>"
-                   data = data + "<td>"+value.Stock_in_date+"</td>"
-                   data = data + "<td>"
-                   data = data + "<button class='btn btn-success sale_modal_button' onclick='modalButtonClicked("+value.id+")' data-toggle='modal' data-target='#exampleModal'>Sold</button>"
-                   data = data + "<a href='#updateButton' class='btn btn-info mx-3' onclick='editData("+value.id+")'  >Edit</a>"
-                   data = data + "<button class='btn btn-danger' onclick='deleteData("+value.id+")' >Delete</button>"
-                   data = data + "</td>"
-                   data = data + "<tr>"
-                  
-               })
-               $('tbody').html(data);
-            }
-        })
-        }
-       
-        allData();
-
-        function modalButtonClicked(id) {
-          $('#sale_product_id').val(id);
-        }
-
-        function addData(){
-            let product_name = $('#product_name').val();
-            let catagory =  $('#catagory').val();
-            let seller_name = $('#seller_name').val();
-            let price_each = $('#price_each').val();
-            let quantity = $('#quantity').val();
-
-
-
-            $.ajax({
-                type:"POST",
-                dataType: 'json',
-                data: {product_name:product_name , catagory:catagory , seller_name:seller_name , price_each:price_each , quantity:quantity},
-                url:"/addProduct",
-
-                success:function(data){
-                    allData();
-                    $(".form-control").val('');
-
-                    Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Your work has been saved',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                   
-                    
-                },
-                error:function(data){
-
-                  $("#product_name_error").text(data.responseJSON.errors.product_name);
-                  $("#seller_name_error").text(data.responseJSON.errors.seller_name);
-                  $("#catagory_error").text(data.responseJSON.errors.catagory);
-                  $("#price_each_error").text(data.responseJSON.errors.price_each);
-                  $("#quantity_error").text(data.responseJSON.errors.quantity);
-                }
-            })
-        
-        }
-
-        function editData(id) {
-            
-
-            $.ajax({
-                type : "GET",
-                dataType:"json",
-                url:"/edit/"+id,
-
-
-                success:function(data) {
-
-                    $('#addP').hide();
-                    $('#updateP').show();
-                    $('#addButton').hide();
-                    $('#updateButton').show();
-
-                    let product_name = $('#product_name').val(data.Product_Name);
-                    let catagory =  $('#catagory').val(data.Catagory);
-                    let id = $('#id').val(data.id);
-                    let seller_name = $('#seller_name').val(data.Seller_Name);
-                    let price_each = $('#price_each').val(data.Product_Price);
-                    let quantity = $('#quantity').val(data.Quantity);
-                }
-            })
-        }
-
-        function updated(id) {
-            Swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, Update it!'
-            }).then((result) => {
-              if (result.isConfirmed) {
-
-                let id = $('#id').val();
-                let product_name = $('#product_name').val();
-                let catagory =  $('#catagory').val();
-                let seller_name = $('#seller_name').val();
-                let price_each = $('#price_each').val();
-                let quantity = $('#quantity').val();
-
-            $.ajax({
-                type:"POST",
-                dataType:"json",
-                data:{product_name:product_name , catagory:catagory , seller_name:seller_name , price_each:price_each , quantity:quantity},
-                url:"/edit/"+id+"/updated",
-
-                success:function(data){
-                    allData();
-                },
-                error:function(data){
-
-                $("#product_name_error").text(data.responseJSON.errors.product_name);
-                $("#seller_name_error").text(data.responseJSON.errors.seller_name);
-                $("#catagory_error").text(data.responseJSON.errors.catagory);
-                $("#price_each_error").text(data.responseJSON.errors.price_each);
-                $("#quantity_error").text(data.responseJSON.errors.quantity);
-            }
-
-            })
-
-            Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Your data has been updated',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-              }
-            })
-
-         
-               
-           
-
-        }
-
-        function deleteData(id) {
-
-             
-        const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-        })
-
-        swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
-        }).then((result) => {
-
-        if (result.isConfirmed) {
-
-
-            $.ajax({
-                type:"POST",
-                dataType:"json",
-                data:{id:id},
-                url:"/delete/"+id,
-
-                success:function(data){
-                    allData();
-                },
-                error:function(data){
-                    alert("Something Went Worng");
-               
-            }
-
-            })
-
-            Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Your data has been deleted',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            
-        } else if (
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-         swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Your imaginary file is safe :)',
-            'error'
-            )
-        }
-        })
-
-           
-
-        }
-
-        function  sold() {
-
-            let id = $('#sale_product_id').val();
-            let quantity = $('#quantity').val();
-            let price = $('#price').val();
-
-            console.log(id);
-
-        }
 
     </script>
 

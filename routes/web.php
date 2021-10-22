@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index.index');
 });
+
 Route::get('/stocks', 'stocksController@allStocks');
 Route::post('/addProduct', 'stocksController@addProduct');
 Route::post('/edit/{id}/updated', 'stocksController@updated');
@@ -25,3 +26,5 @@ Route::post('/delete/{id}', 'stocksController@deleteData');
 
 Route::get('/sale_table', 'saleController@index');
 Route::get('/sale_data', 'saleController@saleData');
+
+Route::post('/sold', 'stocksController@sold');
