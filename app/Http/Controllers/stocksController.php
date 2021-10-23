@@ -15,7 +15,7 @@ class stocksController extends Controller
 
     public function allStocks()
     {
-        $data = stocks::orderBy('id', 'ASC')->paginate(50);
+        $data = stocks::orderBy('id', 'ASC')->paginate(10);
         return response()->json($data);
     }
 

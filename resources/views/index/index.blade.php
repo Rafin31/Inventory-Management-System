@@ -66,7 +66,7 @@
             <div class="col-10 col-md-5">
                 <div class="card ">
                     <div class="card-header">
-                        <h3 class="alert-info text-dark font-weight-bold py-3 loading">Loading...</h3>
+
                         <p id="addP" class="show"><strong>Add Product</strong></p>
                         <p id="updateP" class="show"><strong>Update Product</strong></p>
                     </div>
@@ -114,7 +114,7 @@
                             </div>
                             <input type="hidden" id="id">
                         </div>
-                        <h3 class="alert-info text-dark font-weight-bold py-3 loading">Loading...</h3>
+
                         <button type="submit" id="addButton" onclick="addData()"
                             class="btn btn-primary w-100 show">Add</button>
                         <button type="submit" id="updateButton" class="btn btn-info w-100 show"
